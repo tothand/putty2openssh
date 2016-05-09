@@ -50,6 +50,12 @@ for sec in Config.sections():
             if values['"publickeyfile"']:
                 ifile = values['"publickeyfile"'].strip('"')
                 print "\tIdentityFile ~/.ssh/%s.pem" % ifile[ifile.rfind('\\')+1:ifile.rfind('.')]
+            if values['"portforwardings"']:
+                portfw = values['"portforwardings"'].strip('"')
+                if portfw.startswith('L') or portfw.startswith('4L'):
+                    localport = portfw[portfw.find('L')+1:portfw.find('=')]
+                    remote = portfw[portfw.find('=')+1:]
+                    print "\tLocalForward %s %s" % (localport, remote)
             print ""
     except:
         continue
