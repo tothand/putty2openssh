@@ -32,3 +32,5 @@ Dirty mass convert:
 On OSX you can install puttygen with `brew install putty` given that you have brew already.
 
 On Ubuntu you can install puttygen with `apt-get install putty`
+
+You might need to `chmod 600 ~/.ssh/*.pem`
