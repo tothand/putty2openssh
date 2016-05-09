@@ -22,3 +22,13 @@ It needs a lot of improvement obviously but I needed this very quickly so
 it's quick 'n dirty.
 
 PR's are welcome
+
+## PPK key files to openssh formats
+
+Dirty mass convert:
+
+`for i in *.ppk; do base=${i%.*}; echo "Converting $i ..." ; puttygen $i -O private-openssh -o ~/.ssh/$base.pem ; done`
+
+On OSX you can install puttygen with `brew install putty` given that you have brew already.
+
+On Ubuntu you can install puttygen with `apt-get install putty`
