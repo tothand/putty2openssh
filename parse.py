@@ -1,12 +1,12 @@
 #!/usr/local/bin/python
-import ConfigParser
+import configparser
 
 bannedsections =[
-'HKEY_CURRENT_USER\Software\SimonTatham',
-'HKEY_CURRENT_USER\Software\SimonTatham\PuTTY',
-'HKEY_CURRENT_USER\Software\SimonTatham\PuTTY\Jumplist',
-'HKEY_CURRENT_USER\Software\SimonTatham\PuTTY\Sessions',
-'HKEY_CURRENT_USER\Software\SimonTatham\PuTTY\SshHostKeys']
+r'HKEY_CURRENT_USER\Software\SimonTatham',
+r'HKEY_CURRENT_USER\Software\SimonTatham\PuTTY',
+r'HKEY_CURRENT_USER\Software\SimonTatham\PuTTY\Jumplist',
+r'HKEY_CURRENT_USER\Software\SimonTatham\PuTTY\Sessions',
+r'HKEY_CURRENT_USER\Software\SimonTatham\PuTTY\SshHostKeys']
 
 def NumberConvert(dwordStr):
     if dwordStr.startswith('dword'):
@@ -29,8 +29,8 @@ def ConfigSectionMap(section):
     return dict1
 
 
-Config = ConfigParser.SafeConfigParser()
-Config.read("./putty-utf8.reg")
+Config = configparser.ConfigParser()
+Config.read("./putty-utf8.reg", encoding='utf-8-sig')
 
 for sec in Config.sections():
 #    print sec
@@ -41,22 +41,22 @@ for sec in Config.sections():
     values = ConfigSectionMap(sec)
     try:
         if values['"protocol"'] == '"ssh"':
-            print "Host %s" % sec[sec.rfind('\\')+1:]
-            print "\tHostName %s" % values['"hostname"'].strip('"')
+            print(("Host %s" % sec[sec.rfind('\\')+1:]))
+            print(("\tHostName %s" % values['"hostname"'].strip('"')))
             if values['"username"']:
-                print "\tUser %s" % values['"username"'].strip('"')
+                print(("\tUser %s" % values['"username"'].strip('"')))
             if values['"portnumber"'] and values['"portnumber"'] != "dword:00000016":
-                print "\tPort %s" % NumberConvert(values['"portnumber"'].strip('"'))
+                print(("\tPort %s" % NumberConvert(values['"portnumber"'].strip('"'))))
             if values['"publickeyfile"']:
                 ifile = values['"publickeyfile"'].strip('"')
-                print "\tIdentityFile ~/.ssh/%s.pem" % ifile[ifile.rfind('\\')+1:ifile.rfind('.')]
+                print(("\tIdentityFile ~/.ssh/%s.pem" % ifile[ifile.rfind('\\')+1:ifile.rfind('.')]))
             if values['"portforwardings"']:
                 portfw = values['"portforwardings"'].strip('"')
                 if portfw.startswith('L') or portfw.startswith('4L'):
                     localport = portfw[portfw.find('L')+1:portfw.find('=')]
                     remote = portfw[portfw.find('=')+1:]
-                    print "\tLocalForward %s %s" % (localport, remote)
-            print ""
+                    print(("\tLocalForward %s %s" % (localport, remote)))
+            print("")
     except:
         continue
 #    exit(1)
